@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ComposeWhatsApp</string>
+    <string name="camera_icon_content_description">Camera icon</string>
+    <string name="more_menu_items_content_description">More menu items</string>
 </resources>
