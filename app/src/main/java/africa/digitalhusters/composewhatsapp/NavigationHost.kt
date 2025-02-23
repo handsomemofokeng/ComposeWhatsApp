@@ -1,5 +1,6 @@
 package africa.digitalhusters.composewhatsapp
 
+import africa.digitalhusters.composewhatsapp.ui.screen.home.HomeScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -16,7 +17,9 @@ fun NavigationHost(
         startDestination = Screen.Home.name,
         modifier = modifier
     ) {
-        composable(route = Screen.Home.name) { }
+        composable(route = Screen.Home.name) {
+            HomeScreen()
+        }
     }
 }
 

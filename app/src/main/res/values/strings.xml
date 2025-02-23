@@ -2,4 +2,9 @@
     <string name="app_name">ComposeWhatsApp</string>
     <string name="camera_icon_content_description">Camera icon</string>
     <string name="more_menu_items_content_description">More menu items</string>
+    <string name="chats_label">Chats</string>
+    <string name="updates_label">Updates</string>
+    <string name="communities_label">Communities</string>
+    <string name="calls_label">Calls</string>
+    <string name="search_icon_content_description">Search icon</string>
 </resources>
