@@ -1,16 +1,9 @@
 package africa.digitalhusters.composewhatsapp.ui.components
 
+import africa.digitalhusters.composewhatsapp.R
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Call
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.MailOutline
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -21,26 +14,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
 ) {
-    val selectedIndex = rememberSaveable {
-        mutableIntStateOf(0)
-    }
+    val selectedIndex = rememberSaveable { mutableIntStateOf(0) }
 
     NavigationBar(modifier = modifier) {
         bottomNavItems.forEachIndexed { index, bottomNavItem ->
             NavigationBarItem(
                 selected = selectedIndex.intValue == index,
+                label = { Text(text = bottomNavItem.label) },
                 onClick = {
                     selectedIndex.intValue = index
                 },
                 icon = {
-
                     BadgedBox(
                         badge = {
                             if (bottomNavItem.hasUpdates) {
@@ -53,18 +44,20 @@ fun BottomNavigationBar(
                         },
                         content = {
                             Icon(
-                                imageVector = if (selectedIndex.intValue == index) {
-                                    bottomNavItem.selectedIcon
-                                } else {
-                                    bottomNavItem.unselectedIcon
-                                },
+                                painter = painterResource(
+                                    id =
+                                    if (selectedIndex.intValue == index) {
+                                        bottomNavItem.selectedIcon
+                                    } else {
+                                        bottomNavItem.unselectedIcon
+                                    }
+                                ),
                                 contentDescription = bottomNavItem.label
                             )
                         }
                     )
 
-                },
-                label = { Text(text = bottomNavItem.label) }
+                }
             )
         }
     }
@@ -73,36 +66,36 @@ fun BottomNavigationBar(
 data class BottomNavItem(
     val label: String,
     val hasUpdates: Boolean,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
+    @DrawableRes val selectedIcon: Int,
+    @DrawableRes val unselectedIcon: Int,
     val badgeCount: Int? = null,
 )
 
 val bottomNavItems = listOf(
     BottomNavItem(
         label = "Chats",
-        selectedIcon = Icons.Filled.MailOutline,
-        unselectedIcon = Icons.Outlined.MailOutline,
-        badgeCount = 6,
+        selectedIcon = R.drawable.icn_message_filled,
+        unselectedIcon = R.drawable.icn_message_outlined,
+        badgeCount = 3,
         hasUpdates = false
     ),
     BottomNavItem(
         label = "Updates",
-        selectedIcon = Icons.Filled.DateRange,
-        unselectedIcon = Icons.Outlined.DateRange,
-        hasUpdates = false
+        selectedIcon = R.drawable.icn_updates_filled,
+        unselectedIcon = R.drawable.icn_updates_outlined,
+        hasUpdates = true
     ),
     BottomNavItem(
         label = "Communities",
-        selectedIcon = Icons.Filled.Person,
-        unselectedIcon = Icons.Outlined.Person,
+        selectedIcon = R.drawable.icn_groups_filled,
+        unselectedIcon = R.drawable.icn_groups_outlined,
         hasUpdates = false
     ),
     BottomNavItem(
         label = "Calls",
-        selectedIcon = Icons.Filled.Call,
-        unselectedIcon = Icons.Outlined.Call,
-        hasUpdates = false
+        selectedIcon = R.drawable.icn_phone_filled,
+        unselectedIcon = R.drawable.icn_phone_outlined,
+        hasUpdates = true
     )
 )
 

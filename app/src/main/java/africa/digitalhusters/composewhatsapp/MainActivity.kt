@@ -1,6 +1,8 @@
 package africa.digitalhusters.composewhatsapp
 
 import africa.digitalhusters.composewhatsapp.ui.components.BottomNavigationBar
+import africa.digitalhusters.composewhatsapp.ui.screen.home.HomeScreen
+import africa.digitalhusters.composewhatsapp.ui.screen.home.HomeScreenContent
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,23 +21,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeWhatsAppTheme {
-                HomeScreenContent()
+                HomeScreen()
             }
         }
-    }
-}
-
-@Composable
-fun HomeScreenContent(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    Scaffold(
-        modifier = modifier,
-        bottomBar = { BottomNavigationBar() }
-    ) { innerPadding ->
-        NavigationHost(
-            navController = navController,
-            modifier = Modifier.padding(innerPadding)
-        )
     }
 }
 
