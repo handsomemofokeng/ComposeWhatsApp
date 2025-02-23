@@ -1,6 +1,7 @@
 package africa.digitalhusters.composewhatsapp
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,21 +9,17 @@ import androidx.navigation.compose.composable
 @Composable
 fun NavigationHost(
     navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Chats.name
+        startDestination = Screen.Home.name,
+        modifier = modifier
     ) {
-        composable(route = Screen.Chats.name) {  }
-        composable(route = Screen.Updates.name) {  }
-        composable(route = Screen.Communities.name) {  }
-        composable(route = Screen.Calls.name) {  }
+        composable(route = Screen.Home.name) { }
     }
 }
 
-enum class Screen{
-    Chats,
-    Updates,
-    Communities,
-    Calls
+enum class Screen {
+    Home
 }
