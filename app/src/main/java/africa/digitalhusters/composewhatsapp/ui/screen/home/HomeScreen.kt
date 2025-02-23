@@ -1,29 +1,29 @@
 package africa.digitalhusters.composewhatsapp.ui.screen.home
 
-import africa.digitalhusters.composewhatsapp.NavigationHost
-import africa.digitalhusters.composewhatsapp.R
-import africa.digitalhusters.composewhatsapp.ui.components.BottomNavigationBar
-import africa.digitalhusters.composewhatsapp.ui.components.ComposeWhatsAppTopAppBar
+import africa.digitalhusters.composewhatsapp.ui.screen.calls.CallsScreen
+import africa.digitalhusters.composewhatsapp.ui.screen.chats.ChatsScreen
+import africa.digitalhusters.composewhatsapp.ui.screen.communities.CommunitiesScreen
+import africa.digitalhusters.composewhatsapp.ui.screen.home.components.BottomNavigationBar
+import africa.digitalhusters.composewhatsapp.ui.screen.home.components.CallsScreenTopBar
+import africa.digitalhusters.composewhatsapp.ui.screen.home.components.CommunitiesScreenTopBar
+import africa.digitalhusters.composewhatsapp.ui.screen.home.components.HomeScreenTopBar
+import africa.digitalhusters.composewhatsapp.ui.screen.home.components.UpdatesScreenTopBar
+import africa.digitalhusters.composewhatsapp.ui.screen.home.components.getBottomNavigationItemList
+import africa.digitalhusters.composewhatsapp.ui.screen.updates.UpdatesScreen
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
-import africa.digitalhusters.composewhatsapp.ui.theme.Dimensions
-import android.widget.Toast
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
-
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
@@ -32,49 +32,66 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun HomeScreenContent(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    val context = LocalContext.current
+    val selectedScreenIndex = rememberSaveable { mutableIntStateOf(0) }
+    val pagerState = rememberPagerState(pageCount = { getBottomNavigationItemList().size })
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+           selectedScreenIndex.intValue = page
+        }
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
-            ComposeWhatsAppTopAppBar(
-                title = "Compose WhatsApp",
-                isBold = true,
-                actionIcons = {
-                    Icon(
-                        painter = painterResource(R.drawable.icn_camera),
-                        contentDescription = stringResource(R.string.camera_icon_content_description),
-                        modifier = Modifier
-                            .size(Dimensions.XLarge)
-                            .clickable {
-                                Toast.makeText(context, "Camera icon", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                    )
+            when (selectedScreenIndex.intValue) {
+                1 -> UpdatesScreenTopBar(
+                    onSearchClick = {},
+                    onMenuClick = {}
+                )
 
-                    Spacer(Modifier.width(Dimensions.Large))
+                2 -> CommunitiesScreenTopBar(
+                    onMenuClick = {}
+                )
 
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = stringResource(R.string.more_menu_items_content_description),
-                        modifier = Modifier
-                            .size(Dimensions.XLarge)
-                            .clickable {
-                                Toast.makeText(context, "More menu icon", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                    )
+                3 -> CallsScreenTopBar(
+                    onSearchClick = {},
+                    onMenuClick = {}
+                )
 
+                else -> HomeScreenTopBar(
+                    onCameraClick = {},
+                    onMenuClick = {}
+                )
+            }
+        },
+        content = { contentPadding ->
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.padding(contentPadding),
+                pageContent = {
+                    when (selectedScreenIndex.intValue) {
+                        1 -> UpdatesScreen()
+                        2 -> CommunitiesScreen()
+                        3 -> CallsScreen()
+                        else -> ChatsScreen()
+                    }
                 }
             )
         },
-        bottomBar = { BottomNavigationBar() }
-    ) { innerPadding ->
-        NavigationHost(
-            navController = navController,
-            modifier = Modifier.padding(innerPadding)
-        )
-    }
+        bottomBar = {
+            BottomNavigationBar(
+                selectedIndex = selectedScreenIndex.intValue,
+                onNavigationItemChanged = { index ->
+                    selectedScreenIndex.intValue = index
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(selectedScreenIndex.intValue)
+                    }
+                }
+            )
+        }
+    )
 }
 
 @Preview(showSystemUi = true)
