@@ -9,4 +9,11 @@
     <string name="search_icon_content_description">Search icon</string>
     <string name="ask_meta_ai_or_search_label">Ask Meta AI or Search</string>
     <string name="add_new_chat_content_description">Add new chat</string>
+
+    <array name="chat_screen_filters">
+        <item>All</item>
+        <item>Unread</item>
+        <item>Favourites</item>
+        <item>Groups</item>
+    </array>
 </resources>
