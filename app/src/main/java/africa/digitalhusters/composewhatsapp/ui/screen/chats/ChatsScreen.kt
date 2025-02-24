@@ -1,10 +1,14 @@
 package africa.digitalhusters.composewhatsapp.ui.screen.chats
 
 import africa.digitalhusters.composewhatsapp.R
+import africa.digitalhusters.composewhatsapp.data.generateRandomChats
+import africa.digitalhusters.composewhatsapp.ui.shared.components.ChatItemView
 import africa.digitalhusters.composewhatsapp.ui.shared.components.TextFilter
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
 import africa.digitalhusters.composewhatsapp.ui.theme.Dimensions
 import africa.digitalhusters.composewhatsapp.ui.theme.LightGrey
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatsScreen(
     modifier: Modifier = Modifier,
@@ -46,7 +52,7 @@ fun ChatsScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = Dimensions.Medium),
+            .padding(horizontal = Dimensions.Small),
         content = {
             item {
                 Column {
@@ -61,7 +67,13 @@ fun ChatsScreen(
                             selectedFilterIndex.intValue = selectedIndex
                         }
                     )
+                    Spacer(Modifier.height(Dimensions.Medium))
                 }
+            }
+
+            items(generateRandomChats(20)) { chatItem ->
+                ChatItemView(chatItem)
+                Spacer(Modifier.height(Dimensions.Medium))
             }
         }
     )
@@ -75,8 +87,8 @@ private fun FiltersRow(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(Dimensions.Small),
-        modifier = modifier.padding()
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(Dimensions.Small)
     ) {
         itemsIndexed(filterList) { index, item ->
             TextFilter(
@@ -89,16 +101,13 @@ private fun FiltersRow(
         }
 
         item {
-            Card(modifier = Modifier.clickable {
-
-            }
-            ) {
+            Card {
                 Icon(
                     imageVector = Icons.Default.Add,
                     tint = LightGrey,
                     contentDescription = "Add new filter",
                     modifier = Modifier.padding(
-                        horizontal = Dimensions.XSmall,
+                        horizontal = Dimensions.Small,
                         vertical = 2.dp
                     )
                 )
@@ -125,13 +134,14 @@ private fun ClickableSearchBar(onSearchBarClick: () -> Unit) {
             )
             Spacer(Modifier.width(Dimensions.Medium))
             Text(
-                text = stringResource(R.string.ask_meta_ai_or_search_label),
+                text = stringResource(R.string.ask_mpho_ai_or_search_label),
                 color = LightGrey
             )
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showSystemUi = true)
 @Composable
 private fun ChatScreenPreview() {

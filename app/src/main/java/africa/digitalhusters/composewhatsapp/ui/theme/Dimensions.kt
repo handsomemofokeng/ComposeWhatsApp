@@ -12,4 +12,5 @@ object Dimensions {
     val XLarge: Dp = 32.dp
     val XXLarge: Dp = 40.dp
     val XXXLarge: Dp = 48.dp
+    val ProfilePictureSize: Dp = 52.dp
 }
