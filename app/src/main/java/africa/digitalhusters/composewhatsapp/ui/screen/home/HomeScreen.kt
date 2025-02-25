@@ -1,5 +1,6 @@
 package africa.digitalhusters.composewhatsapp.ui.screen.home
 
+import africa.digitalhusters.composewhatsapp.R
 import africa.digitalhusters.composewhatsapp.ui.screen.calls.CallsScreen
 import africa.digitalhusters.composewhatsapp.ui.screen.chats.ChatsScreen
 import africa.digitalhusters.composewhatsapp.ui.screen.communities.CommunitiesScreen
@@ -11,9 +12,13 @@ import africa.digitalhusters.composewhatsapp.ui.screen.home.components.UpdatesSc
 import africa.digitalhusters.composewhatsapp.ui.screen.home.components.getBottomNavigationItemList
 import africa.digitalhusters.composewhatsapp.ui.screen.updates.UpdatesScreen
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
+import africa.digitalhusters.composewhatsapp.ui.theme.DarkGrey
+import africa.digitalhusters.composewhatsapp.ui.theme.Green
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 
@@ -38,7 +45,7 @@ fun HomeScreenContent(modifier: Modifier = Modifier) {
 
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
-           selectedScreenIndex.intValue = page
+            selectedScreenIndex.intValue = page
         }
     }
 
@@ -75,8 +82,23 @@ fun HomeScreenContent(modifier: Modifier = Modifier) {
                         1 -> UpdatesScreen()
                         2 -> CommunitiesScreen()
                         3 -> CallsScreen()
-                        else -> ChatsScreen()
+                        else -> ChatsScreen(
+                            onSearchBarClick = {}
+                        )
                     }
+                }
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                containerColor = Green,
+                contentColor = DarkGrey,
+                onClick = {},
+                content = {
+                    Icon(
+                        painter = painterResource(R.drawable.icn_add_message),
+                        contentDescription = stringResource(R.string.add_new_chat_content_description)
+                    )
                 }
             )
         },

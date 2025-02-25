@@ -1,19 +1,31 @@
 package africa.digitalhusters.composewhatsapp.ui.screen.home.components
 
 import africa.digitalhusters.composewhatsapp.R
+import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
+import africa.digitalhusters.composewhatsapp.ui.theme.DarkGrey
+import africa.digitalhusters.composewhatsapp.ui.theme.Dimensions
+import africa.digitalhusters.composewhatsapp.ui.theme.Green
+import africa.digitalhusters.composewhatsapp.ui.theme.TealGreenDark
+import africa.digitalhusters.composewhatsapp.ui.theme.Typography
+import africa.digitalhusters.composewhatsapp.ui.theme.White
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 const val CHATS = "Chats"
 const val UPDATES = "Updates"
@@ -29,34 +41,61 @@ fun BottomNavigationBar(
     val bottomNavItems = getBottomNavigationItemList()
     NavigationBar(modifier = modifier) {
         bottomNavItems.forEachIndexed { index, bottomNavItem ->
+            val isSelected = selectedIndex == index
             NavigationBarItem(
-                selected = selectedIndex == index,
-                label = { Text(text = bottomNavItem.label) },
+                selected = isSelected,
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = TealGreenDark.copy(alpha = 0.5f),
+                    selectedIconColor = White
+                ),
+                label = {
+                    Text(
+                        text = bottomNavItem.label,
+                        style = Typography.labelSmall,
+                        fontWeight = if (isSelected) {
+                            FontWeight.Bold
+                        } else {
+                            FontWeight.Normal
+                        }
+                    )
+                },
                 onClick = {
                     onNavigationItemChanged(index)
                 },
                 icon = {
                     BadgedBox(
                         badge = {
-                            if (bottomNavItem.hasUpdates) {
-                                Badge()
-                            } else if (bottomNavItem.badgeCount != null) {
-                                Badge {
-                                    Text(text = bottomNavItem.badgeCount.toString())
+                            when {
+                                bottomNavItem.hasUpdates -> {
+                                    Badge(
+                                        containerColor = Green,
+                                        modifier = Modifier
+                                            .padding(Dimensions.Small)
+                                            .size(11.dp)
+                                    )
+                                }
+
+                                bottomNavItem.badgeCount != null -> {
+                                    Badge(
+                                        containerColor = Green,
+                                        contentColor = DarkGrey,
+                                        modifier = Modifier.padding(Dimensions.XSmall)
+                                    ) {
+                                        Text(text = bottomNavItem.badgeCount.toString())
+                                    }
                                 }
                             }
                         },
                         content = {
                             Icon(
                                 painter = painterResource(
-                                    id =
-                                    if (selectedIndex == index) {
+                                    id = if (isSelected) {
                                         bottomNavItem.selectedIcon
                                     } else {
                                         bottomNavItem.unselectedIcon
                                     }
                                 ),
-                                contentDescription = bottomNavItem.label
+                                contentDescription = bottomNavItem.label,
                             )
                         }
                     )
@@ -72,7 +111,7 @@ fun getBottomNavigationItemList(): List<BottomNavItem> {
             label = CHATS,
             selectedIcon = R.drawable.icn_message_filled,
             unselectedIcon = R.drawable.icn_message_outlined,
-            badgeCount = 3,
+            badgeCount = 23,
             hasUpdates = false
         ),
         BottomNavItem(
@@ -91,7 +130,8 @@ fun getBottomNavigationItemList(): List<BottomNavItem> {
             label = CALLS,
             selectedIcon = R.drawable.icn_phone_filled,
             unselectedIcon = R.drawable.icn_phone_outlined,
-            hasUpdates = true
+            hasUpdates = false,
+            badgeCount = 2
         )
     )
     return bottomNavItems
@@ -108,10 +148,13 @@ data class BottomNavItem(
 @Preview(showSystemUi = true)
 @Composable
 private fun BottomNavItemNavBarPreview() {
-    Column {
-        Spacer(Modifier.weight(1f))
-        BottomNavigationBar(
-            selectedIndex = 2,
-            onNavigationItemChanged = {})
+    ComposeWhatsAppTheme {
+        Column {
+            Spacer(Modifier.weight(1f))
+            BottomNavigationBar(
+                selectedIndex = 2,
+                onNavigationItemChanged = {}
+            )
+        }
     }
 }
