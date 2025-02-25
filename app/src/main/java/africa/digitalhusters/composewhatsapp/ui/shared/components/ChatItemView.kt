@@ -1,7 +1,6 @@
 package africa.digitalhusters.composewhatsapp.ui.shared.components
 
 import africa.digitalhusters.composewhatsapp.R
-import africa.digitalhusters.composewhatsapp.data.ChatItem
 import africa.digitalhusters.composewhatsapp.data.generateRandomChats
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
 import africa.digitalhusters.composewhatsapp.ui.theme.DarkGrey
@@ -37,20 +36,25 @@ import coil.compose.AsyncImage
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatItemView(
-    chatItem: ChatItem,
+    title: String,
+    subtitle: String,
+    hasNewUpdates: Boolean,
     modifier: Modifier = Modifier,
+    timestamp: String = "",
+    profilePictureUrl: String = "",
+    unreadMessageCount: Int = 0,
 ) {
 
     Row(modifier = modifier.padding(vertical = Dimensions.Small)) {
         Box {
             CircularProgressIndicator(
                 modifier = Modifier.size(Dimensions.ProfilePictureSize),
-                progress = { if (chatItem.hasNewUpdates) 1f else 0f },
+                progress = { if (hasNewUpdates) 1f else 0f },
                 color = Green,
                 strokeWidth = 2.dp
             )
             AsyncImage(
-                model = chatItem.profilePictureUrl,
+                model = profilePictureUrl,
                 contentDescription = "Profile picture",
                 placeholder = painterResource(R.drawable.icn_default_profile_picture),
                 error = painterResource(R.drawable.icn_default_profile_picture),
@@ -67,17 +71,18 @@ fun ChatItemView(
                 .weight(1f)
                 .padding(start = Dimensions.Medium)
         ) {
-            val hasUnreadMessages = chatItem.unreadMessageCount > 0
+            val hasUnreadMessages = unreadMessageCount > 0
             Row {
                 Text(
-                    text = chatItem.contactName,
-                    style = Typography.titleLarge,
+                    text = title,
+                    style = Typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f)
                 )
                 Text(
-                    text = chatItem.timestamp,
+                    text = timestamp,
                     style = Typography.bodySmall,
                     fontWeight = if (hasUnreadMessages) FontWeight.Bold else FontWeight.Normal,
                     color = if (hasUnreadMessages) Green else LightGrey,
@@ -91,7 +96,7 @@ fun ChatItemView(
 
             Row {
                 Text(
-                    text = chatItem.lastMessage,
+                    text = subtitle,
                     style = Typography.bodyMedium,
                     color = LightGrey,
                     maxLines = 1,
@@ -102,7 +107,7 @@ fun ChatItemView(
                 )
                 if (hasUnreadMessages) {
                     Text(
-                        text = chatItem.unreadMessageCount.toString(),
+                        text = unreadMessageCount.toString(),
                         style = Typography.bodySmall,
                         color = DarkGrey,
                         modifier = Modifier
@@ -127,11 +132,20 @@ fun ChatItemView(
 private fun ChatItemPreview() {
     ComposeWhatsAppTheme {
         Column(modifier = Modifier.padding(top = Dimensions.XXLarge)) {
+            val randomContact1 = generateRandomChats(1)[0]
+            val randomContact2 = generateRandomChats(1)[0]
             ChatItemView(
-                chatItem = generateRandomChats(1)[0]
+                title = randomContact1.contactName,
+                subtitle = randomContact1.lastMessage,
+                timestamp = randomContact1.timestamp,
+                hasNewUpdates = randomContact1.hasNewUpdates,
+                profilePictureUrl = randomContact1.profilePictureUrl.orEmpty(),
+                unreadMessageCount = randomContact1.unreadMessageCount
             )
             ChatItemView(
-                chatItem = generateRandomChats(1)[0]
+                title = randomContact2.contactName,
+                subtitle = randomContact2.timestamp,
+                hasNewUpdates = randomContact2.hasNewUpdates
             )
         }
     }

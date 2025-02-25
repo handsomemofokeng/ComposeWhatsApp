@@ -85,7 +85,14 @@ fun ChatsScreen(
             }
 
             items(filteredChats) { chatItem ->
-                ChatItemView(chatItem)
+                ChatItemView(
+                    title = chatItem.contactName,
+                    subtitle = chatItem.lastMessage,
+                    timestamp = chatItem.timestamp,
+                    hasNewUpdates = chatItem.hasNewUpdates,
+                    profilePictureUrl = chatItem.profilePictureUrl.orEmpty(),
+                    unreadMessageCount = chatItem.unreadMessageCount
+                )
                 Spacer(Modifier.height(Dimensions.Medium))
             }
         }
@@ -110,7 +117,7 @@ private fun getFilteredChats(
             it.isGroupChat
         }.toPersistentList()
 
-        else -> allChats
+        else -> allChats.sortedBy { it.timestamp }.toPersistentList()
     }
 }
 
