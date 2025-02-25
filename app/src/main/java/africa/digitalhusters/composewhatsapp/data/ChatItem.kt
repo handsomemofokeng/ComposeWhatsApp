@@ -5,8 +5,8 @@ import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.util.Random
 import java.util.Locale.getDefault
+import java.util.Random
 
 data class ChatItem(
     val id: String,
@@ -16,6 +16,7 @@ data class ChatItem(
     val profilePictureUrl: String?,
     val unreadMessageCount: Int = 0,
     val isGroupChat: Boolean = false,
+    val isFavourite: Boolean = false,
     val hasNewUpdates: Boolean = false,
     val participants: List<String>? = null,
 )
@@ -28,12 +29,18 @@ fun generateRandomChats(count: Int): List<ChatItem> {
         "Jack", "Kelly", "Liam", "Mia", "Noah", "Olivia", "Peter", "Quinn", "Riley", "Sophia",
         "Thomas", "Ursula", "Victor", "Wendy", "Xavier", "Yara", "Zack"
     )
+    val lastNames = listOf(
+        "Smith", "Johnson", "Williams","", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
+        "Martinez", "Hernandez", "Lopez", "Gonzalez","", "Wilson", "Anderson", "Thomas", "Taylor",
+        "Moore", "Jackson","", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez",
+        "Clark", "Lewis", "Robinson", "Walker",""
+    )
+
     val messages = listOf(
         "Hey!", "How are you?", "What's up?", "See you later!", "Good morning!",
         "Good night!", "Long time no see!", "I'm busy.", "Let's chat!", "Call me back!",
         "Meeting at 3 PM", "Project update", "Weekend plans?", "Movie night?", "Dinner tonight?",
         "The quick brown fox jumps over the lazy dog. This is a classic pangram, a sentence that uses every letter of the alphabet. It's often used for testing typewriters or fonts, and now, apparently, for generating long messages for Kotlin examples.",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         "This is a very long message designed to test how text wrapping and ellipsis work in Jetpack Compose. It's important to consider how your UI handles long text strings, especially on different screen sizes and orientations.  We need to make sure the text is readable and doesn't break the layout.",
         "Compose is a modern toolkit for building native Android UI. It simplifies and accelerates UI development with less code, powerful tools, and intuitive Kotlin APIs.  This long text is just a filler to see how it behaves in a `Text` composable.",
         "Testing, testing, one two three.  Is this thing on?  This message is intentionally long and repetitive to simulate a real-world scenario where a user might enter a large amount of text.  We want to ensure the UI remains responsive and handles the text gracefully.",
@@ -59,14 +66,21 @@ fun generateRandomChats(count: Int): List<ChatItem> {
     )
 
     return List(count) {
-        val name = names[random.nextInt(names.size)]
         val message = messages[random.nextInt(messages.size)]
         val timestamp = LocalDateTime.now().minusDays(random.nextInt(7).toLong())
             .minusHours(random.nextInt(24).toLong()).minusMinutes(random.nextInt(60).toLong())
-        val profilePicture = if (random.nextBoolean()) generateRandomImageUrls() else null
+        val profilePicture = if (random.nextBoolean()) generateRandomImageUrl() else null
         val unreadCount = random.nextInt(5)
 
         val isGroup = random.nextBoolean()
+        val groupNames = generateRandomGroupNames(10)
+
+        val name = if (isGroup) {
+            groupNames[random.nextInt(groupNames.size)]
+        } else {
+            names[random.nextInt(names.size)] + " " + lastNames[random.nextInt(lastNames.size)]
+        }
+
         val participantsList = if (isGroup) {
             val numParticipants = random.nextInt(5) + 2
             names.shuffled().take(numParticipants)
@@ -83,15 +97,44 @@ fun generateRandomChats(count: Int): List<ChatItem> {
             isGroupChat = isGroup,
             participants = participantsList,
             id = random.nextInt().toString(),
-            hasNewUpdates = random.nextBoolean()
+            hasNewUpdates = random.nextBoolean(),
+            isFavourite = random.nextBoolean()
         )
     }
 }
 
-fun generateRandomImageUrls(): String {
+fun generateRandomImageUrl(): String {
     val random = Random()
     val id = random.nextInt(1084)
     return "https://picsum.photos/id/$id/200/300"
+}
+
+fun generateRandomGroupNames(count: Int): List<String> {
+    val random = Random()
+    val prefixes = listOf(
+        "The", "Awesome","Super","Mega","Cool","Fantastic","Incredible","Dynamic","United",
+        "Creative"
+    )
+    val suffixes = listOf(
+        "Squad","Team","Crew","Group","Gang","Alliance","Circle","Collective","Legion","Force"
+    )
+    val nouns = listOf(
+        "Coders","Gamers","Friends","Explorers","Innovators","Achievers","Dreamers","Warriors",
+        "Thinkers","Creators"
+    )
+
+    return List(count) {
+        val prefix = prefixes[random.nextInt(prefixes.size)]
+        val suffix = suffixes[random.nextInt(suffixes.size)]
+        val noun = nouns[random.nextInt(nouns.size)]
+
+        when (random.nextInt(3)) { // Three possible formats
+            0 -> "$prefix $noun $suffix" // "The Coders Squad"
+            1 -> "$noun $suffix"       // "Coders Squad"
+            2 -> "$prefix $noun"       // "The Coders"
+            else -> "$prefix $noun $suffix" // Default (shouldn't happen)
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

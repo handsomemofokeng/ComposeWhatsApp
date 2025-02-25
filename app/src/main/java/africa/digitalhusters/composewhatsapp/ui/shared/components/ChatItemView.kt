@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -78,16 +79,11 @@ fun ChatItemView(
                 Text(
                     text = chatItem.timestamp,
                     style = Typography.bodySmall,
-                    fontWeight = if (hasUnreadMessages) {
-                        FontWeight.Bold
-                    } else {
-                        FontWeight.Normal
-                    },
-                    color = if (hasUnreadMessages) {
-                        Green
-                    } else {
-                        LightGrey
-                    }
+                    fontWeight = if (hasUnreadMessages) FontWeight.Bold else FontWeight.Normal,
+                    color = if (hasUnreadMessages) Green else LightGrey,
+                    modifier = Modifier
+                        .padding(start = Dimensions.Small)
+                        .align(alignment = Alignment.CenterVertically)
                 )
             }
 
@@ -114,8 +110,10 @@ fun ChatItemView(
                                 color = Green,
                                 shape = CircleShape
                             )
-                            .padding(vertical = Dimensions.XSmall,
-                                horizontal = Dimensions.Small)
+                            .padding(
+                                vertical = Dimensions.XSmall,
+                                horizontal = Dimensions.Small
+                            )
                     )
                 }
             }

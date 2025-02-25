@@ -1,6 +1,7 @@
 package africa.digitalhusters.composewhatsapp.ui.screen.chats
 
 import africa.digitalhusters.composewhatsapp.R
+import africa.digitalhusters.composewhatsapp.data.ChatItem
 import africa.digitalhusters.composewhatsapp.data.generateRandomChats
 import africa.digitalhusters.composewhatsapp.ui.shared.components.ChatItemView
 import africa.digitalhusters.composewhatsapp.ui.shared.components.TextFilter
@@ -30,8 +31,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
@@ -39,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -47,7 +53,13 @@ fun ChatsScreen(
     modifier: Modifier = Modifier,
     onSearchBarClick: () -> Unit,
 ) {
+
+    // TODO: States to be moved to a viewModel
     val selectedFilterIndex = rememberSaveable { mutableIntStateOf(0) }
+    val allChats = remember { generateRandomChats(10).toPersistentList() }
+    var filteredChats by remember {
+        mutableStateOf(allChats)
+    }
 
     LazyColumn(
         modifier = modifier
@@ -65,18 +77,41 @@ fun ChatsScreen(
                         selectedFilterIndex = selectedFilterIndex.intValue,
                         onFilterClick = { selectedIndex ->
                             selectedFilterIndex.intValue = selectedIndex
+                            filteredChats = getFilteredChats(selectedIndex, allChats)
                         }
                     )
                     Spacer(Modifier.height(Dimensions.Medium))
                 }
             }
 
-            items(generateRandomChats(20)) { chatItem ->
+            items(filteredChats) { chatItem ->
                 ChatItemView(chatItem)
                 Spacer(Modifier.height(Dimensions.Medium))
             }
         }
     )
+}
+
+// TODO: Move function to viewModel
+private fun getFilteredChats(
+    selectedIndex: Int,
+    allChats: PersistentList<ChatItem>,
+): PersistentList<ChatItem> {
+    return when (selectedIndex) {
+        1 -> allChats.filter {
+            it.unreadMessageCount > 0
+        }.toPersistentList()
+
+        2 -> allChats.filter {
+            it.isFavourite
+        }.toPersistentList()
+
+        3 -> allChats.filter {
+            it.isGroupChat
+        }.toPersistentList()
+
+        else -> allChats
+    }
 }
 
 @Composable
