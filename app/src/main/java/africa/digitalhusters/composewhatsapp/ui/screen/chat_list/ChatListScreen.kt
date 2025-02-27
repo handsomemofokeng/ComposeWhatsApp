@@ -57,11 +57,12 @@ fun ChatListScreen(
     )
 }
 
+val allChats = generateRandomChats(10).toPersistentList()
+
 @Composable
 private fun ChatListScreenContent(modifier: Modifier, onSearchBarClick: () -> Unit) {
     // TODO: States to be moved to a viewModel
     val selectedFilterIndex = rememberSaveable { mutableIntStateOf(0) }
-    val allChats = remember { generateRandomChats(10).toPersistentList() }
     var filteredChats by remember { mutableStateOf(allChats.sortedBy { it.timestamp }.reversed()) }
 
     LazyColumn(
@@ -94,7 +95,7 @@ private fun ChatListScreenContent(modifier: Modifier, onSearchBarClick: () -> Un
                     statusCount = chatItem.statusCount,
                     isGroup = chatItem.isGroupChat,
                     timestamp = formatLocalDateTime(chatItem.timestamp),
-                    viewedStatusCount = chatItem.viewedStatusCount,
+                    viewedStatusCount = chatItem.unseenStatusCount,
                     profilePictureUrl = chatItem.profilePictureUrl.orEmpty(),
                     unreadMessageCount = chatItem.unreadMessageCount
                 )

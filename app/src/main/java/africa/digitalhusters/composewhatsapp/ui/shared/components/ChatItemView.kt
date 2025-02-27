@@ -1,5 +1,6 @@
 package africa.digitalhusters.composewhatsapp.ui.shared.components
 
+import africa.digitalhusters.composewhatsapp.R
 import africa.digitalhusters.composewhatsapp.data.generateRandomChats
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
 import africa.digitalhusters.composewhatsapp.ui.theme.DarkGrey
@@ -8,15 +9,20 @@ import africa.digitalhusters.composewhatsapp.ui.theme.Green
 import africa.digitalhusters.composewhatsapp.ui.theme.LightGrey
 import africa.digitalhusters.composewhatsapp.ui.theme.Typography
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,16 +43,29 @@ fun ChatItemView(
     profilePictureUrl: String = "",
     unreadMessageCount: Int = 0,
     isGroup: Boolean = false,
+    isShowAddStatusIcon: Boolean = false,
 ) {
 
     Row(modifier = modifier.padding(vertical = Dimensions.Small)) {
-        SegmentedCircularProfilePicture(
-            profilePictureUrl = profilePictureUrl,
-            progress = viewedStatusCount * 0.1f,
-            segments = statusCount,
-            isGroup = isGroup,
-            modifier = Modifier.size(Dimensions.ProfilePictureSize),
-        )
+        Box {
+            SegmentedCircularProfilePicture(
+                profilePictureUrl = profilePictureUrl,
+                progress = viewedStatusCount * 0.1f,
+                segments = statusCount,
+                isGroup = isGroup,
+                modifier = Modifier.size(Dimensions.ProfilePictureSize),
+            )
+
+            if (isShowAddStatusIcon) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.add_new_status_icon_content_description),
+                    modifier = Modifier
+                        .background(color = Green, shape = CircleShape)
+                        .align(alignment = Alignment.BottomEnd)
+                )
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -143,13 +162,19 @@ fun formatLocalDateTime(
     }
 }
 
+val randomContact1 = generateRandomChats(1)[0]
+val randomContact2 = generateRandomChats(1)[0]
+
 @Preview(showSystemUi = true)
 @Composable
 private fun ChatItemPreview() {
     ComposeWhatsAppTheme {
-        Column(modifier = Modifier.padding(vertical = Dimensions.XXLarge, horizontal = Dimensions.Small)) {
-            val randomContact1 = generateRandomChats(1)[0]
-            val randomContact2 = generateRandomChats(1)[0]
+        Column(
+            modifier = Modifier.padding(
+                vertical = Dimensions.XXLarge,
+                horizontal = Dimensions.Small
+            )
+        ) {
             ChatItemView(
                 title = randomContact1.contactName,
                 subtitle = randomContact1.lastMessage,
@@ -157,13 +182,13 @@ private fun ChatItemPreview() {
                 timestamp = formatLocalDateTime(randomContact1.timestamp),
                 profilePictureUrl = randomContact1.profilePictureUrl.orEmpty(),
                 unreadMessageCount = randomContact1.unreadMessageCount,
-                viewedStatusCount = randomContact1.viewedStatusCount
+                viewedStatusCount = randomContact1.unseenStatusCount
             )
             ChatItemView(
                 title = randomContact2.contactName,
                 subtitle = formatLocalDateTime(randomContact2.timestamp),
                 statusCount = randomContact2.statusCount,
-                viewedStatusCount = randomContact2.viewedStatusCount,
+                viewedStatusCount = randomContact2.unseenStatusCount,
             )
         }
     }

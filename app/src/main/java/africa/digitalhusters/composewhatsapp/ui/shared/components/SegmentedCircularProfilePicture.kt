@@ -36,15 +36,15 @@ import coil.compose.AsyncImage
 @Composable
 fun SegmentedCircularProfilePicture(
     profilePictureUrl: String,
-    progress: Float, // 0f to 1f
+    progress: Float,
     segments: Int,
     modifier: Modifier = Modifier,
     isGroup: Boolean = false,
-    segmentColor: Color = Green, // Default to green
-    backgroundColor: Color = LightGrey, // Default background color
-    segmentSpacing: Float = 10f, // Spacing between segments
+    segmentColor: Color = Green,
+    backgroundColor: Color = LightGrey,
+    segmentSpacing: Float = 10f,
     segmentWidth: Float = 6f,
-    animDuration: Int = 1000, // Animation duration in milliseconds
+    animDuration: Int = 1000,
 ) {
     val animatedProgress = animateFloatAsState(
         targetValue = progress,
@@ -53,11 +53,11 @@ fun SegmentedCircularProfilePicture(
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.size(Dimensions.ProfilePictureSize) // Adjust size as needed
+        modifier = modifier.size(Dimensions.ProfilePictureSize)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val segmentAngle = 360f / segments
-            val startAngle = -90f // Start from the top
+            val startAngle = -90f
 
             for (i in 0 until segments) {
                 drawArc(
@@ -66,7 +66,7 @@ fun SegmentedCircularProfilePicture(
                     sweepAngle = if (segments == 1) {
                         segmentAngle
                     } else {
-                        segmentAngle - segmentSpacing // Subtract spacing
+                        segmentAngle - segmentSpacing
                     },
                     useCenter = false,
                     style = Stroke(width = segmentWidth, cap = StrokeCap.Round)

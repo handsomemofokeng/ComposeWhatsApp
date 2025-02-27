@@ -11,7 +11,8 @@ data class ChatItem(
     val profilePictureUrl: String?,
     val unreadMessageCount: Int = 0,
     val statusCount: Int = 0,
-    val viewedStatusCount: Int = 0,
+    val unseenStatusCount: Int = 0,
+    val followersCount: Int = 0,
     val isGroupChat: Boolean = false,
     val isFavourite: Boolean = false,
     val participants: List<String>? = null,
@@ -68,6 +69,7 @@ fun generateRandomChats(count: Int): List<ChatItem> {
         val unreadMessageCount = random.nextInt(5)
         val statusCount = random.nextInt(10)
         val viewedStatusCount = random.nextInt(9)
+        val followersCount = random.nextInt(20000000)
 
         val isGroup = random.nextBoolean()
         val groupNames = generateRandomGroupNames(10)
@@ -92,7 +94,8 @@ fun generateRandomChats(count: Int): List<ChatItem> {
             profilePictureUrl = profilePicture,
             unreadMessageCount = unreadMessageCount,
             statusCount = statusCount,
-            viewedStatusCount = viewedStatusCount,
+            unseenStatusCount = viewedStatusCount,
+            followersCount = followersCount,
             isGroupChat = isGroup,
             participants = participantsList,
             id = random.nextInt().toString(),
