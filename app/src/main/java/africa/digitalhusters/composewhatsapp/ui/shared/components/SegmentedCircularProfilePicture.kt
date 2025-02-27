@@ -4,7 +4,6 @@ import africa.digitalhusters.composewhatsapp.R
 import africa.digitalhusters.composewhatsapp.ui.theme.Dimensions
 import africa.digitalhusters.composewhatsapp.ui.theme.Green
 import africa.digitalhusters.composewhatsapp.ui.theme.LightGrey
-import africa.digitalhusters.composewhatsapp.ui.theme.PaleGrey
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -39,12 +38,13 @@ fun SegmentedCircularProfilePicture(
     profilePictureUrl: String,
     progress: Float, // 0f to 1f
     segments: Int,
+    modifier: Modifier = Modifier,
+    isGroup: Boolean = false,
     segmentColor: Color = Green, // Default to green
     backgroundColor: Color = LightGrey, // Default background color
     segmentSpacing: Float = 10f, // Spacing between segments
-    segmentWidth: Float = 4f,
+    segmentWidth: Float = 6f,
     animDuration: Int = 1000, // Animation duration in milliseconds
-    modifier: Modifier = Modifier,
 ) {
     val animatedProgress = animateFloatAsState(
         targetValue = progress,
@@ -93,17 +93,22 @@ fun SegmentedCircularProfilePicture(
             }
         }
 
+        val defaultPicture = if (isGroup)
+            painterResource(R.drawable.icn_groups_filled)
+        else
+            painterResource(R.drawable.icn_default_profile_picture)
+
         AsyncImage(
             model = profilePictureUrl,
             contentDescription = stringResource(R.string.profile_picture_content_description),
-            placeholder = painterResource(R.drawable.icn_default_profile_picture),
-            error = painterResource(R.drawable.icn_default_profile_picture),
+            placeholder = defaultPicture,
+            error = defaultPicture,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .padding(3.dp)
                 .then(modifier)
                 .clip(shape = CircleShape)
-                .background(color = PaleGrey)
+                .background(color = LightGrey)
         )
     }
 }
@@ -121,8 +126,6 @@ fun SegmentedCircularProgressBarPreview() {
             profilePictureUrl = "",
             progress = progress,
             segments = 10,
-            segmentColor = Green,
-            backgroundColor = LightGrey,
             segmentSpacing = 10f,
             segmentWidth = 10f,
             modifier = Modifier.size(265.dp)

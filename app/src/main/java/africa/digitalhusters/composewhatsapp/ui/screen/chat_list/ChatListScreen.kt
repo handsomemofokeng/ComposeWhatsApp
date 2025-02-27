@@ -92,6 +92,7 @@ private fun ChatListScreenContent(modifier: Modifier, onSearchBarClick: () -> Un
                     title = chatItem.contactName,
                     subtitle = chatItem.lastMessage,
                     statusCount = chatItem.statusCount,
+                    isGroup = chatItem.isGroupChat,
                     timestamp = formatLocalDateTime(chatItem.timestamp),
                     viewedStatusCount = chatItem.viewedStatusCount,
                     profilePictureUrl = chatItem.profilePictureUrl.orEmpty(),

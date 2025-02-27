@@ -8,7 +8,6 @@ import africa.digitalhusters.composewhatsapp.ui.theme.Green
 import africa.digitalhusters.composewhatsapp.ui.theme.LightGrey
 import africa.digitalhusters.composewhatsapp.ui.theme.Typography
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -37,18 +36,17 @@ fun ChatItemView(
     timestamp: String = "",
     profilePictureUrl: String = "",
     unreadMessageCount: Int = 0,
+    isGroup: Boolean = false,
 ) {
 
     Row(modifier = modifier.padding(vertical = Dimensions.Small)) {
-        Box {
-            SegmentedCircularProfilePicture(
-                profilePictureUrl = profilePictureUrl,
-                progress = viewedStatusCount * 0.1f,
-                segments = statusCount,
-                segmentWidth = 6f,
-                modifier = Modifier.size(Dimensions.ProfilePictureSize),
-            )
-        }
+        SegmentedCircularProfilePicture(
+            profilePictureUrl = profilePictureUrl,
+            progress = viewedStatusCount * 0.1f,
+            segments = statusCount,
+            isGroup = isGroup,
+            modifier = Modifier.size(Dimensions.ProfilePictureSize),
+        )
 
         Column(
             modifier = Modifier
@@ -149,7 +147,7 @@ fun formatLocalDateTime(
 @Composable
 private fun ChatItemPreview() {
     ComposeWhatsAppTheme {
-        Column(modifier = Modifier.padding(top = Dimensions.XXLarge)) {
+        Column(modifier = Modifier.padding(vertical = Dimensions.XXLarge, horizontal = Dimensions.Small)) {
             val randomContact1 = generateRandomChats(1)[0]
             val randomContact2 = generateRandomChats(1)[0]
             ChatItemView(
