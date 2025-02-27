@@ -1,27 +1,23 @@
 package africa.digitalhusters.composewhatsapp.data
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-import java.util.Locale.getDefault
 import java.util.Random
 
 data class ChatItem(
     val id: String,
     val contactName: String,
     val lastMessage: String,
-    val timestamp: String,
+    val timestamp: LocalDateTime,
     val profilePictureUrl: String?,
     val unreadMessageCount: Int = 0,
+    val statusCount: Int = 0,
+    val unseenStatusCount: Int = 0,
+    val followersCount: Int = 0,
     val isGroupChat: Boolean = false,
     val isFavourite: Boolean = false,
-    val hasNewUpdates: Boolean = false,
     val participants: List<String>? = null,
 )
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun generateRandomChats(count: Int): List<ChatItem> {
     val random = Random()
     val names = listOf(
@@ -30,10 +26,10 @@ fun generateRandomChats(count: Int): List<ChatItem> {
         "Thomas", "Ursula", "Victor", "Wendy", "Xavier", "Yara", "Zack"
     )
     val lastNames = listOf(
-        "Smith", "Johnson", "Williams","", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
-        "Martinez", "Hernandez", "Lopez", "Gonzalez","", "Wilson", "Anderson", "Thomas", "Taylor",
-        "Moore", "Jackson","", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez",
-        "Clark", "Lewis", "Robinson", "Walker",""
+        "Smith", "Johnson", "Williams","", "Brown", "Jones", "Garcia", "Miller", "Davis",
+        "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez","", "Wilson", "Anderson",
+        "Thomas", "Taylor", "Moore", "Jackson","", "Martin", "Lee", "Perez", "Thompson", "White",
+        "Harris", "Sanchez", "Clark", "Lewis", "Robinson", "Walker",""
     )
 
     val messages = listOf(
@@ -70,7 +66,10 @@ fun generateRandomChats(count: Int): List<ChatItem> {
         val timestamp = LocalDateTime.now().minusDays(random.nextInt(7).toLong())
             .minusHours(random.nextInt(24).toLong()).minusMinutes(random.nextInt(60).toLong())
         val profilePicture = if (random.nextBoolean()) generateRandomImageUrl() else null
-        val unreadCount = random.nextInt(5)
+        val unreadMessageCount = random.nextInt(5)
+        val statusCount = random.nextInt(10)
+        val viewedStatusCount = random.nextInt(9)
+        val followersCount = random.nextInt(20000000)
 
         val isGroup = random.nextBoolean()
         val groupNames = generateRandomGroupNames(10)
@@ -91,13 +90,15 @@ fun generateRandomChats(count: Int): List<ChatItem> {
         ChatItem(
             contactName = name,
             lastMessage = message,
-            timestamp = formatLocalDateTime(timestamp),
+            timestamp = timestamp,
             profilePictureUrl = profilePicture,
-            unreadMessageCount = unreadCount,
+            unreadMessageCount = unreadMessageCount,
+            statusCount = statusCount,
+            unseenStatusCount = viewedStatusCount,
+            followersCount = followersCount,
             isGroupChat = isGroup,
             participants = participantsList,
             id = random.nextInt().toString(),
-            hasNewUpdates = random.nextBoolean(),
             isFavourite = random.nextBoolean()
         )
     }
@@ -133,36 +134,6 @@ fun generateRandomGroupNames(count: Int): List<String> {
             1 -> "$noun $suffix"       // "Coders Squad"
             2 -> "$prefix $noun"       // "The Coders"
             else -> "$prefix $noun $suffix" // Default (shouldn't happen)
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun formatLocalDateTime(
-    dateTime: LocalDateTime,
-    locale: Locale = getDefault(),
-): String {
-    val now = LocalDateTime.now()
-    val today = now.toLocalDate()
-    val date = dateTime.toLocalDate()
-
-    return when {
-        date == today -> {
-            val formatter =
-                DateTimeFormatter.ofPattern("HH:mm", locale) // Time only (24-hour format)
-            dateTime.format(formatter)
-        }
-
-        date.isEqual(today.minusDays(1)) -> "Yesterday"
-        date.isBefore(today.minusDays(1)) -> {
-            val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd", locale) // YYYY/MM/DD format
-            dateTime.format(formatter)
-        }
-
-        else -> {
-            // Handle future dates if needed.  For this requirement, we'll just use YYYY/MM/DD
-            val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd", locale)
-            dateTime.format(formatter)
         }
     }
 }

@@ -2,7 +2,7 @@ package africa.digitalhusters.composewhatsapp.ui.screen.home
 
 import africa.digitalhusters.composewhatsapp.R
 import africa.digitalhusters.composewhatsapp.ui.screen.calls.CallsScreen
-import africa.digitalhusters.composewhatsapp.ui.screen.chats.ChatsScreen
+import africa.digitalhusters.composewhatsapp.ui.screen.chat_list.ChatListScreen
 import africa.digitalhusters.composewhatsapp.ui.screen.communities.CommunitiesScreen
 import africa.digitalhusters.composewhatsapp.ui.screen.home.components.BottomNavigationBar
 import africa.digitalhusters.composewhatsapp.ui.screen.home.components.CallsScreenTopBar
@@ -10,7 +10,7 @@ import africa.digitalhusters.composewhatsapp.ui.screen.home.components.Communiti
 import africa.digitalhusters.composewhatsapp.ui.screen.home.components.HomeScreenTopBar
 import africa.digitalhusters.composewhatsapp.ui.screen.home.components.UpdatesScreenTopBar
 import africa.digitalhusters.composewhatsapp.ui.screen.home.components.getBottomNavigationItemList
-import africa.digitalhusters.composewhatsapp.ui.screen.updates.UpdatesScreen
+import africa.digitalhusters.composewhatsapp.ui.screen.updates_list.UpdatesListScreen
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
 import africa.digitalhusters.composewhatsapp.ui.theme.DarkGrey
 import africa.digitalhusters.composewhatsapp.ui.theme.Green
@@ -39,7 +39,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun HomeScreenContent(modifier: Modifier = Modifier) {
-    val selectedScreenIndex = rememberSaveable { mutableIntStateOf(0) }
+    val selectedScreenIndex = rememberSaveable { mutableIntStateOf(1) }
     val pagerState = rememberPagerState(pageCount = { getBottomNavigationItemList().size })
     val coroutineScope = rememberCoroutineScope()
 
@@ -79,10 +79,10 @@ fun HomeScreenContent(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(contentPadding),
                 pageContent = {
                     when (selectedScreenIndex.intValue) {
-                        1 -> UpdatesScreen()
+                        1 -> UpdatesListScreen()
                         2 -> CommunitiesScreen()
                         3 -> CallsScreen()
-                        else -> ChatsScreen(
+                        else -> ChatListScreen(
                             onSearchBarClick = {}
                         )
                     }

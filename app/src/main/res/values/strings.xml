@@ -9,6 +9,19 @@
     <string name="search_icon_content_description">Search icon</string>
     <string name="ask_mpho_ai_or_search_label">Ask Mpho AI or Search</string>
     <string name="add_new_chat_content_description">Add new chat</string>
+    <string name="status_label">Status</string>
+    <string name="recent_updates_label">Recent updates</string>
+    <string name="my_status_label">My status</string>
+    <string name="profile_picture_content_description">Profile picture</string>
+    <string name="collapse_icon_content_description">Collapse icon</string>
+    <string name="viewed_updates_label">Viewed updates</string>
+    <string name="tap_to_add_status_update_label">Tap to add status update</string>
+    <string name="add_new_status_icon_content_description">Add new status icon</string>
+    <string name="muted_updates_label">Mutes updates</string>
+    <string name="channels_label">Channels</string>
+    <string name="channels_subtitle">Stay updated on topics that matter to you. Find channels to follow below.</string>
+    <string name="follow_label">Follow</string>
+    <string name="explore_more_label">Explore more</string>
 
     <array name="chat_screen_filters">
         <item>All</item>

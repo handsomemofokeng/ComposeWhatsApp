@@ -1,15 +1,14 @@
-package africa.digitalhusters.composewhatsapp.ui.screen.chats
+package africa.digitalhusters.composewhatsapp.ui.screen.chat_list
 
 import africa.digitalhusters.composewhatsapp.R
 import africa.digitalhusters.composewhatsapp.data.ChatItem
 import africa.digitalhusters.composewhatsapp.data.generateRandomChats
 import africa.digitalhusters.composewhatsapp.ui.shared.components.ChatItemView
 import africa.digitalhusters.composewhatsapp.ui.shared.components.TextFilter
+import africa.digitalhusters.composewhatsapp.ui.shared.components.formatLocalDateTime
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
 import africa.digitalhusters.composewhatsapp.ui.theme.Dimensions
 import africa.digitalhusters.composewhatsapp.ui.theme.LightGrey
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,19 +46,24 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatsScreen(
+fun ChatListScreen(
     modifier: Modifier = Modifier,
     onSearchBarClick: () -> Unit,
 ) {
+    ChatListScreenContent(
+        modifier = modifier,
+        onSearchBarClick = onSearchBarClick
+    )
+}
 
+val allChats = generateRandomChats(10).toPersistentList()
+
+@Composable
+private fun ChatListScreenContent(modifier: Modifier, onSearchBarClick: () -> Unit) {
     // TODO: States to be moved to a viewModel
     val selectedFilterIndex = rememberSaveable { mutableIntStateOf(0) }
-    val allChats = remember { generateRandomChats(10).toPersistentList() }
-    var filteredChats by remember {
-        mutableStateOf(allChats)
-    }
+    var filteredChats by remember { mutableStateOf(allChats.sortedBy { it.timestamp }.reversed()) }
 
     LazyColumn(
         modifier = modifier
@@ -85,7 +89,16 @@ fun ChatsScreen(
             }
 
             items(filteredChats) { chatItem ->
-                ChatItemView(chatItem)
+                ChatItemView(
+                    title = chatItem.contactName,
+                    subtitle = chatItem.lastMessage,
+                    statusCount = chatItem.statusCount,
+                    isGroup = chatItem.isGroupChat,
+                    timestamp = formatLocalDateTime(chatItem.timestamp),
+                    viewedStatusCount = chatItem.unseenStatusCount,
+                    profilePictureUrl = chatItem.profilePictureUrl.orEmpty(),
+                    unreadMessageCount = chatItem.unreadMessageCount
+                )
                 Spacer(Modifier.height(Dimensions.Medium))
             }
         }
@@ -110,7 +123,7 @@ private fun getFilteredChats(
             it.isGroupChat
         }.toPersistentList()
 
-        else -> allChats
+        else -> allChats.sortedBy { it.timestamp }.toPersistentList()
     }
 }
 
@@ -176,12 +189,11 @@ private fun ClickableSearchBar(onSearchBarClick: () -> Unit) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showSystemUi = true)
 @Composable
 private fun ChatScreenPreview() {
     ComposeWhatsAppTheme {
-        ChatsScreen(
+        ChatListScreen(
             modifier = Modifier.padding(top = Dimensions.Large),
             onSearchBarClick = {}
         )
