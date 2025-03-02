@@ -4,6 +4,8 @@ import africa.digitalhusters.composewhatsapp.R
 import africa.digitalhusters.composewhatsapp.data.generateRandomChats
 import africa.digitalhusters.composewhatsapp.ui.shared.components.ChatItemView
 import africa.digitalhusters.composewhatsapp.ui.shared.components.CollapsingText
+import africa.digitalhusters.composewhatsapp.ui.shared.components.PrimaryButton
+import africa.digitalhusters.composewhatsapp.ui.shared.components.SecondaryButton
 import africa.digitalhusters.composewhatsapp.ui.shared.components.formatLocalDateTime
 import africa.digitalhusters.composewhatsapp.ui.theme.ComposeWhatsAppTheme
 import africa.digitalhusters.composewhatsapp.ui.theme.Dimensions
@@ -23,10 +25,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -152,7 +151,7 @@ fun UpdatesListScreenContent(modifier: Modifier = Modifier) {
 
         item {
             Column {
-                HorizontalDivider()
+                HorizontalDivider(modifier = Modifier.padding(top = Dimensions.Medium))
 
                 Spacer(Modifier.height(Dimensions.Large))
 
@@ -184,27 +183,23 @@ fun UpdatesListScreenContent(modifier: Modifier = Modifier) {
                     modifier = Modifier.weight(1f)
                 )
 
-                Button(
-                    colors = ButtonDefaults.buttonColors(containerColor = TealGreen),
+                PrimaryButton(
+                    text = stringResource(R.string.follow_label),
+                    textColor = White,
+                    buttonColor = TealGreen,
                     onClick = {}
-                ) {
-                    Text(
-                        text = stringResource(R.string.follow_label),
-                        color = White
-                    )
-                }
+                )
             }
-
         }
 
         item {
             Column {
-                OutlinedButton(onClick = {}) {
-                    Text(
-                        text = stringResource(R.string.explore_more_label),
-                        color = Green
-                    )
-                }
+                SecondaryButton(
+                    text = stringResource(R.string.explore_more_label),
+                    textColor = Green,
+                    modifier = Modifier.padding(vertical = Dimensions.Small),
+                    onClick = {},
+                )
                 Spacer(Modifier.height(Dimensions.XXXLarge))
             }
         }
