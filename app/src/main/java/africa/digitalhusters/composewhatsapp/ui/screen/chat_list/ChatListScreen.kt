@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -142,7 +143,7 @@ private fun FiltersRow(
             TextFilter(
                 text = item,
                 isSelected = selectedFilterIndex == index,
-                modifier = Modifier.clickable {
+                onClick = {
                     onFilterClick(index)
                 }
             )
@@ -168,11 +169,11 @@ private fun FiltersRow(
 private fun ClickableSearchBar(onSearchBarClick: () -> Unit) {
     Card(
         modifier = Modifier
+            .clip(shape = RoundedCornerShape(percent = 100))
             .clickable {
                 onSearchBarClick()
             }
             .fillMaxWidth(),
-        shape = RoundedCornerShape(percent = 100)
     ) {
         Row(modifier = Modifier.padding(all = Dimensions.Medium)) {
             Icon(
