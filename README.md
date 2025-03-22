@@ -12,7 +12,14 @@ This project is a UI clone of the WhatsApp application, built using Jetpack Comp
 
 ## Screenshots
 
-*(Add screenshots of your UI here. You can include screenshots of the chat list, etc.)*
+![ChatListScreen](https://github.com/user-attachments/assets/120b77b6-c910-4f4f-85f6-207445adfd0d)
+
+
+![UpdatesListScreen](https://github.com/user-attachments/assets/182d0f12-26af-49bb-bb0e-3f6f1096a4c1)
+
+
+![CommunitiesScreen](https://github.com/user-attachments/assets/6e247b5b-773c-4be2-bc79-342a7bbe9882)
+
 
 ## Technologies Used
 
