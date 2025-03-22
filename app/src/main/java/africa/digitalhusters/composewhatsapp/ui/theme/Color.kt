@@ -9,7 +9,7 @@ val TealGreenDark = Color(0xFF075e54)
 
 val DarkGrey: Color = Color(0xFF02070D)
 val MediumGrey: Color = Color(0xFF1A314D)
-val LightGrey: Color = Color(0xFF5C6C80)
+val LightGrey: Color = Color(0xFF6F788C)
 
 val PaleGrey: Color = Color(0xFFCED3D9)
 val PaleGrey50: Color = Color(0xFFE3E6EA)
