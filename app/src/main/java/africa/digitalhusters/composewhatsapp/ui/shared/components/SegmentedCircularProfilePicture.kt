@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,7 +40,8 @@ fun SegmentedCircularProfilePicture(
     progress: Float,
     segments: Int,
     modifier: Modifier = Modifier,
-    isGroup: Boolean = false,
+//    isGroup: Boolean = false,
+    defaultPicture: Painter = painterResource(R.drawable.icn_default_profile_picture),
     segmentColor: Color = Green,
     backgroundColor: Color = LightGrey,
     segmentSpacing: Float = 10f,
@@ -93,10 +95,10 @@ fun SegmentedCircularProfilePicture(
             }
         }
 
-        val defaultPicture = if (isGroup)
-            painterResource(R.drawable.icn_groups_filled)
-        else
-            painterResource(R.drawable.icn_default_profile_picture)
+//        val defaultPicture = when {
+//            isGroup -> painterResource(R.drawable.icn_groups_filled)
+//            else -> painterResource(R.drawable.icn_default_profile_picture)
+//        }
 
         AsyncImage(
             model = profilePictureUrl,
@@ -108,7 +110,7 @@ fun SegmentedCircularProfilePicture(
                 .padding(3.dp)
                 .then(modifier)
                 .clip(shape = CircleShape)
-                .background(color = LightGrey)
+                .background(color = backgroundColor)
         )
     }
 }

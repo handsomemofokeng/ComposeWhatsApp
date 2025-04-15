@@ -2,6 +2,7 @@ package africa.digitalhusters.composewhatsapp.ui.screen.updates_list
 
 import africa.digitalhusters.composewhatsapp.R
 import africa.digitalhusters.composewhatsapp.data.generateRandomChats
+import africa.digitalhusters.composewhatsapp.ui.screen.home.components.TitleText
 import africa.digitalhusters.composewhatsapp.ui.shared.components.ChatItemView
 import africa.digitalhusters.composewhatsapp.ui.shared.components.CollapsingText
 import africa.digitalhusters.composewhatsapp.ui.shared.components.PrimaryButton
@@ -33,7 +34,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -57,11 +57,7 @@ fun UpdatesListScreenContent(modifier: Modifier = Modifier) {
     ) {
         item {
             Column {
-                Text(
-                    text = stringResource(R.string.status_label),
-                    style = Typography.titleLarge,
-                    fontWeight = FontWeight.Medium
-                )
+                TitleText(text = stringResource(R.string.status_label))
 
                 Spacer(Modifier.height(Dimensions.Medium))
 
@@ -155,11 +151,7 @@ fun UpdatesListScreenContent(modifier: Modifier = Modifier) {
 
                 Spacer(Modifier.height(Dimensions.Large))
 
-                Text(
-                    text = stringResource(R.string.channels_label),
-                    style = Typography.titleLarge,
-                    fontWeight = FontWeight.Medium
-                )
+                TitleText(text = stringResource(R.string.channels_label))
 
                 Spacer(Modifier.height(Dimensions.Medium))
 
