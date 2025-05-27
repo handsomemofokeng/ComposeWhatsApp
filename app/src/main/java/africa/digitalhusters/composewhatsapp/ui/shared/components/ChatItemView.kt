@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,7 +53,8 @@ fun ChatItemView(
                 profilePictureUrl = profilePictureUrl,
                 progress = viewedStatusCount * 0.1f,
                 segments = statusCount,
-                isGroup = isGroup,
+                defaultPicture = if (isGroup) painterResource(R.drawable.icn_groups_filled)
+                else painterResource(R.drawable.icn_default_profile_picture),
                 modifier = Modifier.size(Dimensions.ProfilePictureSize),
             )
 
@@ -71,6 +73,7 @@ fun ChatItemView(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = Dimensions.Small)
+                .align(alignment = Alignment.CenterVertically)
         ) {
             val hasUnreadMessages = unreadMessageCount > 0
             Row {
@@ -90,43 +93,35 @@ fun ChatItemView(
                     color = if (hasUnreadMessages) Green else LightGrey,
                     modifier = Modifier
                         .padding(
-                            top = 2.dp,
-                            start = Dimensions.Small
+                            top = 2.dp, start = Dimensions.Small
                         )
                         .align(alignment = Alignment.CenterVertically)
                 )
             }
 
-            Row {
-                Text(
-                    text = subtitle,
-                    style = Typography.bodyMedium,
-                    color = LightGrey,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(
-                            top = Dimensions.XSmall,
-                            end = Dimensions.XSmall
-                        )
-                )
-                if (hasUnreadMessages) {
+            if (subtitle.isNotBlank()) {
+                Row {
                     Text(
-                        text = unreadMessageCount.toString(),
-                        style = Typography.bodySmall,
-                        fontWeight = FontWeight.Medium,
-                        color = DarkGrey,
+                        text = subtitle,
+                        style = Typography.bodyMedium,
+                        color = LightGrey,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
-                            .background(
-                                color = Green,
-                                shape = CircleShape
-                            )
-                            .padding(
-                                vertical = Dimensions.XSmall,
-                                horizontal = Dimensions.Small
-                            )
+                            .weight(1f)
+                            .padding(top = Dimensions.XSmall, end = Dimensions.XSmall)
                     )
+                    if (hasUnreadMessages) {
+                        Text(
+                            text = unreadMessageCount.toString(),
+                            style = Typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = DarkGrey,
+                            modifier = Modifier
+                                .background(color = Green, shape = CircleShape)
+                                .padding(vertical = Dimensions.XSmall, horizontal = Dimensions.Small)
+                        )
+                    }
                 }
             }
         }
@@ -171,8 +166,7 @@ private fun ChatItemPreview() {
     ComposeWhatsAppTheme {
         Column(
             modifier = Modifier.padding(
-                vertical = Dimensions.XXLarge,
-                horizontal = Dimensions.Small
+                vertical = Dimensions.XXLarge, horizontal = Dimensions.Small
             )
         ) {
             ChatItemView(
@@ -189,6 +183,12 @@ private fun ChatItemPreview() {
                 subtitle = formatLocalDateTime(randomContact2.timestamp),
                 statusCount = randomContact2.statusCount,
                 viewedStatusCount = randomContact2.unseenStatusCount,
+            )
+            ChatItemView(
+                title = "Add favourite",
+                subtitle = "",
+                statusCount = 0,
+                viewedStatusCount = 0,
             )
         }
     }
