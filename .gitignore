@@ -25,3 +25,4 @@ local.properties
 /.idea/runConfigurations.xml
 /.idea/vcs.xml
 /.idea/AndroidProjectSystem.xml
+/.idea/studiobot.xml

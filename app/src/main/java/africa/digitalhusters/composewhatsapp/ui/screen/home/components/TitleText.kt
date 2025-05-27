@@ -12,7 +12,7 @@ fun TitleText(
 ) {
     Text(
         text = text,
-        style = Typography.titleLarge,
+        style = Typography.titleMedium,
         fontWeight = FontWeight.Medium
     )
 }
