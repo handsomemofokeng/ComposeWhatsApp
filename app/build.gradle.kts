@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "africa.digitalhusters.composewhatsapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "africa.digitalhusters.composewhatsapp"
